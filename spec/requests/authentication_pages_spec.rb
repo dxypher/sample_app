@@ -25,9 +25,6 @@ describe "Authentication" do
         it { should_not have_selector('div.alert.alert-error') }
       end
     end
-  end
-
-  describe "with valid information" do
     describe "with valid information" do
       let(:user) { FactoryGirl.create(:user) }
       before { sign_in user }
@@ -46,6 +43,9 @@ describe "Authentication" do
       end
     end
   end
+
+  
+    
   describe "authorization" do
 
     describe "for non-signed-in users" do
@@ -68,6 +68,22 @@ describe "Authentication" do
           it { should have_selector('title', text: 'Sign in') }
         end
       end
+      describe "in the Microposts controller" do
+
+        describe "submitting to the create action" do
+          before { post microposts_path }
+          specify { response.should redirect_to(signin_path) }
+        end
+
+        describe "submitting to the destroy action" do
+          before do
+            micropost = FactoryGirl.create(:micropost)
+            delete micropost_path(micropost)
+          end
+          specify { response.should redirect_to(signin_path) }
+        end
+      
+    end
       let(:user) { FactoryGirl.create(:user) }
     describe "as wrong user" do
       let(:user) { FactoryGirl.create(:user) }
